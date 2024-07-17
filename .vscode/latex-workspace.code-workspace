@@ -9,7 +9,6 @@
 		"ltex.additionalRules.motherTongue": "pl-PL",
 		"ltex.language": "pl-PL",
 		"explorer.excludeGitIgnore": true,
-		"latex-workshop.docker.image.latex": "pandoc/latex",
 		"latex-workshop.linting.chktex.enabled": true,
 		"latex-workshop.linting.chktex.exec.args": [
 			"-wall",
