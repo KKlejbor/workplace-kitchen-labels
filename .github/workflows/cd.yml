@@ -44,6 +44,7 @@ jobs:
               with:
                 working_directory: ${{env.latex_source_dir}}
                 root_file: ${{env.path_to_document}}
+                latexmk_use_xelatex: true
             - name: Upload PDF
               uses: actions/upload-artifact@v4.3.1
               with:
@@ -67,6 +68,7 @@ jobs:
               uses: xu-cheng/latex-action@3.2.0
               with:
                 root_file: ${{env.path_to_diff_document}}
+                latexmk_use_xelatex: true
             - name: Get current date
               run: echo "CURRENT_DATETIME=$(date +'%d-%m-%YT%H%M%S')" >> $GITHUB_ENV
             - name: Create date tag

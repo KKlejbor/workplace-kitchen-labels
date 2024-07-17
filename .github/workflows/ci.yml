@@ -19,3 +19,4 @@ jobs:
               with:
                 working_directory: ${{env.latex_source_dir}}
                 root_file: ${{env.path_to_document}}
+                latexmk_use_xelatex: true

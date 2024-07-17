@@ -1,7 +1,70 @@
-\documentclass{report}
+\documentclass{article}
+
+\usepackage[a6paper, landscape, left=20mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage{pgfmorepages}
+
+
+\pgfpagesuselayout{4 on 1}[a4paper, landscape]
+\usepackage{fontspec}
+\setmainfont{JetBrainsMono-Regular.ttf}
+\pagenumbering{gobble}
+\linespread{1.25}
+
+\newenvironment{centered}
+{
+    \topskip0pt
+    \vspace*{\fill}
+        \begin{center}
+}
+{
+        \end{center}
+    \vspace*{\fill}
+}
 
 \begin{document}
-
-Lorem ipsum
-
+\fontsize{30}{36}\selectfont
+        \begin{centered}
+            Zupy \\
+            Soups
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Słodycze i orzechy \\
+            Sweets and nuts
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Słodycze i orzechy \\
+            Sweets and nuts
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Przyprawy i cukier \\
+            Spices and sugar
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Kubki \\
+            Cups
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Kubki i szklanki \\
+            Cups and glasses
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Różne \\
+            Miscellaneous
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Kawa i cherbata \\
+            Coffee and tea
+        \end{centered}
+        \newpage
+        \begin{centered}
+            Podstawki \\
+            Coasters
+        \end{centered}
 \end{document}
