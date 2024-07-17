@@ -9,29 +9,9 @@ env:
     path_to_document: 'main.tex'
     path_to_pdf: 'main.pdf'
     path_to_artifact_pdf: 'pdf/main.pdf'
-    path_to_old_document: 'old-latex/main.tex'
-    path_to_diff_document: 'changes.tex'
-    path_to_diff_pdf: 'changes.pdf'
 permissions:
   contents: write
 jobs:
-    checkout_base_document:
-        if: startsWith(github.event.pull_request.head.ref, 'latex')
-        name: Retrieve old document
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4.1.1
-              with:
-                ref: ${{github.event.pull_request.base.sha}}
-            - name: Copy old document
-              run: cp -r latex old-latex
-            - name: Upload old document
-              uses: actions/upload-artifact@v4.3.1
-              with:
-                name: old-latex
-                path: old-latex/
-
     build_latex:
         if: startsWith(github.event.pull_request.head.ref, 'latex')
         name: Build LaTeX Document
@@ -52,23 +32,14 @@ jobs:
                 path: ${{env.latex_source_dir}}/${{env.path_to_pdf}}
     
     create_latex_release:
-        name: Create a release with changes
-        needs: [checkout_base_document, build_latex]
+        name: Create a release
+        needs: [build_latex]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4.1.1
-            - name: Install latexdiff
-              run: sudo apt-get update -y && sudo apt-get install -y latexdiff
             - name: Download all artifacts
               uses: actions/download-artifact@v4.1.4
-            - name: Create diff document
-              run: latexdiff ${{env.path_to_old_document}} ${{env.latex_source_dir}}/${{env.path_to_document}} > ${{env.path_to_diff_document}}
-            - name: Build diff document
-              uses: xu-cheng/latex-action@3.2.0
-              with:
-                root_file: ${{env.path_to_diff_document}}
-                latexmk_use_xelatex: true
             - name: Get current date
               run: echo "CURRENT_DATETIME=$(date +'%d-%m-%YT%H%M%S')" >> $GITHUB_ENV
             - name: Create date tag
@@ -78,9 +49,7 @@ jobs:
             - name: Release
               uses: softprops/action-gh-release@v2.0.4
               with:
-                files: |
-                  ${{env.path_to_artifact_pdf}}
-                  ${{env.path_to_diff_pdf}}
+                files: ${{env.path_to_artifact_pdf}}
                 tag_name: ${{env.CURRENT_DATETIME}} 
                 draft: false
                 prerelease: false
