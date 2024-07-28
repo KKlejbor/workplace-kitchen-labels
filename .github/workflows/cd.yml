@@ -5,52 +5,35 @@ on:
     branches:
       - 'main'
 env:
-    latex_source_dir: 'latex'
     path_to_document: 'main.tex'
     path_to_pdf: 'main.pdf'
-    path_to_artifact_pdf: 'pdf/main.pdf'
 permissions:
   contents: write
 jobs:
-    build_latex:
-        if: startsWith(github.event.pull_request.head.ref, 'latex')
-        name: Build LaTeX Document
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4.1.1
-            - name: Build LaTeX document
-              uses: xu-cheng/latex-action@3.2.0
-              with:
-                working_directory: ${{env.latex_source_dir}}
-                root_file: ${{env.path_to_document}}
-                latexmk_use_xelatex: true
-            - name: Upload PDF
-              uses: actions/upload-artifact@v4.3.1
-              with:
-                name: pdf
-                path: ${{env.latex_source_dir}}/${{env.path_to_pdf}}
-    
     create_latex_release:
-        name: Create a release
-        needs: [build_latex]
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4.1.1
-            - name: Download all artifacts
-              uses: actions/download-artifact@v4.1.4
-            - name: Get current date
-              run: echo "CURRENT_DATETIME=$(date +'%d-%m-%YT%H%M%S')" >> $GITHUB_ENV
-            - name: Create date tag
-              uses: rickstaa/action-create-tag@v1.7.2
-              with:
-                tag: ${{env.CURRENT_DATETIME}}
-            - name: Release
-              uses: softprops/action-gh-release@v2.0.4
-              with:
-                files: ${{env.path_to_artifact_pdf}}
-                tag_name: ${{env.CURRENT_DATETIME}} 
-                draft: false
-                prerelease: false
-                make_latest: true
+      name: Create a release
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4.1.1
+        - name: Build LaTeX document
+          uses: xu-cheng/latex-action@3.2.0
+          with:
+            root_file: ${{env.path_to_document}}
+            latexmk_use_xelatex: true
+        - name: Download all artifacts
+          uses: actions/download-artifact@v4.1.4
+        - name: Get current date
+          run: echo "CURRENT_DATETIME=$(date +'%d-%m-%YT%H%M%S')" >> $GITHUB_ENV
+        - name: Create date tag
+          uses: rickstaa/action-create-tag@v1.7.2
+          with:
+            tag: ${{env.CURRENT_DATETIME}}
+        - name: Release
+          uses: softprops/action-gh-release@v2.0.4
+          with:
+            files: ${{env.path_to_pdf}}
+            tag_name: ${{env.CURRENT_DATETIME}} 
+            draft: false
+            prerelease: false
+            make_latest: true
