@@ -4,7 +4,6 @@ on:
     branches:
       - 'main'
 env:
-    latex_source_dir: 'latex'
     path_to_document: 'main.tex'
 jobs:
     build_latex:
@@ -17,6 +16,5 @@ jobs:
             - name: Build LaTeX document
               uses: xu-cheng/latex-action@3.2.0
               with:
-                working_directory: ${{env.latex_source_dir}}
                 root_file: ${{env.path_to_document}}
                 latexmk_use_xelatex: true
